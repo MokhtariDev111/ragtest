@@ -1,0 +1,76 @@
+{
+  "dataset": "RAG Benchmark Evaluation Set v1.0",
+  "language": "en",
+  "questions": [
+    {
+      "id": "q001",
+      "question": "What is retrieval-augmented generation?",
+      "expected_answer": "Retrieval-Augmented Generation (RAG) is a technique that combines information retrieval with large language model generation. The model first retrieves relevant documents from a knowledge base, then uses them as context to generate accurate and grounded answers.",
+      "source_document": "rag_overview.txt",
+      "context_keywords": ["retrieval", "generation", "knowledge base", "context"]
+    },
+    {
+      "id": "q002",
+      "question": "What are the main chunking strategies used in RAG pipelines?",
+      "expected_answer": "Common chunking strategies include fixed-size chunking, recursive character splitting, sliding window chunking, and semantic chunking which groups text by meaning.",
+      "source_document": "rag_overview.txt",
+      "context_keywords": ["chunking", "fixed", "recursive", "sliding window", "semantic"]
+    },
+    {
+      "id": "q003",
+      "question": "What is the role of embedding models in RAG?",
+      "expected_answer": "Embedding models convert text chunks and queries into dense vector representations that capture semantic meaning, enabling similarity-based retrieval from vector databases.",
+      "source_document": "rag_overview.txt",
+      "context_keywords": ["embedding", "vector", "semantic", "representation"]
+    },
+    {
+      "id": "q004",
+      "question": "What is hybrid search in the context of RAG?",
+      "expected_answer": "Hybrid search combines keyword-based search (like BM25) with dense vector search to leverage both lexical and semantic matching, improving retrieval accuracy.",
+      "source_document": "rag_overview.txt",
+      "context_keywords": ["hybrid", "BM25", "keyword", "vector search"]
+    },
+    {
+      "id": "q005",
+      "question": "What is the faithfulness metric in RAG evaluation?",
+      "expected_answer": "Faithfulness measures whether all claims in the generated answer are actually supported by the retrieved context, quantifying hallucination.",
+      "source_document": "rag_overview.txt",
+      "context_keywords": ["faithfulness", "hallucination", "context", "claims"]
+    },
+    {
+      "id": "q006",
+      "question": "What is context precision in RAG evaluation?",
+      "expected_answer": "Context precision measures the fraction of retrieved context chunks that are actually relevant to answering the question, reflecting the quality of the retrieval step.",
+      "source_document": "rag_overview.txt",
+      "context_keywords": ["context precision", "relevant", "retrieved", "fraction"]
+    },
+    {
+      "id": "q007",
+      "question": "What models does the RAG benchmark framework support for local inference?",
+      "expected_answer": "The framework supports Mistral, Qwen, and Llama 3.2 running locally via Ollama.",
+      "source_document": "rag_overview.txt",
+      "context_keywords": ["Mistral", "Qwen", "Llama", "Ollama", "local"]
+    },
+    {
+      "id": "q008",
+      "question": "What OCR engines are supported in the benchmarking framework?",
+      "expected_answer": "The framework supports Tesseract, EasyOCR, PaddleOCR, and DocTR for optical character recognition.",
+      "source_document": "rag_overview.txt",
+      "context_keywords": ["Tesseract", "EasyOCR", "PaddleOCR", "DocTR"]
+    },
+    {
+      "id": "q009",
+      "question": "What vector databases are supported in the framework?",
+      "expected_answer": "The framework supports ChromaDB, FAISS, and Qdrant as vector database backends.",
+      "source_document": "rag_overview.txt",
+      "context_keywords": ["Chroma", "FAISS", "Qdrant", "vector database"]
+    },
+    {
+      "id": "q010",
+      "question": "What is multi-query retrieval?",
+      "expected_answer": "Multi-query retrieval generates multiple paraphrase versions of the original query using an LLM, retrieves documents for each, and merges the results to improve recall.",
+      "source_document": "rag_overview.txt",
+      "context_keywords": ["multi-query", "paraphrase", "recall", "merge"]
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+# ============================================================
+# RAG Benchmarking Framework — Python Dependencies
+# ============================================================
+# Install with:  pip install -r requirements.txt
+# Some OCR engines require additional system-level packages.
+# See README.md for full setup instructions.
+
+# ── Core ─────────────────────────────────────────────────────
+pyyaml>=6.0
+python-dotenv>=1.0.0
+click>=8.1.0
+tqdm>=4.66.0
+loguru>=0.7.0
+psutil>=5.9.0
+numpy>=1.24.0
+pandas>=2.0.0
+
+# ── Document Loading ─────────────────────────────────────────
+pymupdf>=1.23.0          # PDF loading (fitz)
+pdfplumber>=0.10.0       # Alternative PDF loading
+Pillow>=10.0.0           # Image handling
+
+# ── OCR Engines ──────────────────────────────────────────────
+pytesseract>=0.3.10      # Tesseract OCR (requires tesseract binary)
+easyocr>=1.7.0           # EasyOCR
+paddlepaddle>=2.5.0      # PaddleOCR backend (CPU)
+paddleocr>=2.7.0         # PaddleOCR
+python-doctr[torch]>=0.8.0  # DocTR (requires torch)
+
+# ── WER / CER metrics ────────────────────────────────────────
+jiwer>=3.0.0             # Word Error Rate & Character Error Rate
+
+# ── Text Processing ──────────────────────────────────────────
+langchain>=0.2.0         # RecursiveCharacterTextSplitter
+langchain-community>=0.2.0
+langchain-text-splitters>=0.2.0
+nltk>=3.8.0
+sentence-transformers>=2.6.0  # Semantic chunking + embeddings
+tiktoken>=0.6.0          # Token counting
+
+# ── Embedding Models ──────────────────────────────────────────
+sentence-transformers>=2.6.0
+InstructorEmbedding>=1.0.0
+transformers>=4.38.0
+torch>=2.1.0
+
+# ── Vector Databases ─────────────────────────────────────────
+chromadb>=0.5.0
+faiss-cpu>=1.7.4
+qdrant-client>=1.9.0
+
+# ── Retrieval / Reranking ────────────────────────────────────
+rank_bm25>=0.2.2         # BM25 keyword search
+# cross-encoder included in sentence-transformers
+
+# ── LLM (Ollama) ─────────────────────────────────────────────
+ollama>=0.2.0            # Ollama Python client
+requests>=2.31.0
+
+# ── Evaluation ───────────────────────────────────────────────
+scikit-learn>=1.3.0
+scipy>=1.11.0
+
+# ── Results Storage ───────────────────────────────────────────
+# sqlite3 is part of the Python standard library
+
+# ── Dashboard ────────────────────────────────────────────────
+streamlit>=1.35.0
+plotly>=5.20.0
+altair>=5.3.0
+
+# ── Testing ──────────────────────────────────────────────────
+pytest>=7.4.0
+pytest-cov>=4.1.0

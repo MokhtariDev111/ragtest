@@ -1,0 +1,2 @@
+ocr_engine,chunking_strategy,chunk_size,embedding_model,vector_db,retrieval_strategy,llm_model,num_runs,avg_faithfulness,avg_answer_relevancy,avg_context_precision,avg_context_recall,avg_precision_at_k,avg_recall_at_k,avg_total_latency_s
+none,fixed,512,minilm,faiss,basic,mistral,1,0.96,0.96,,,,,8.1446

@@ -1,0 +1,171 @@
+2026-03-17 02:05:08.966 | INFO     | __main__:run:79 - config: config\experiment_config.yaml
+2026-03-17 02:05:08.967 | INFO     | __main__:run:80 - project: RAG Benchmark - Fast Run
+2026-03-17 02:05:12.362 | DEBUG    | results_storage.database:_init_db:106 - Database ready: results_storage\experiments.db
+2026-03-17 02:05:12.371 | INFO     | experiment_runner.runner:_load_evaluation_dataset:284 - Loaded 10 evaluation questions
+2026-03-17 02:05:12.372 | INFO     | experiment_runner.runner:run:63 - Starting experiments: 1 combinations to run
+2026-03-17 02:05:12.372 | INFO     | experiment_runner.runner:run:68 - [1/1] ocr=none | chunk=fixed(512) | emb=minilm | db=faiss | ret=basic | llm=mistral
+2026-03-17 02:05:12.372 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\rag_overview.txt (ext=.txt)
+2026-03-17 02:05:12.381 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: rag_overview.txt (7254 chars)
+2026-03-17 02:05:28.412 | INFO     | embedding_layer.embedder:_load:78 - Loading embedding model: sentence-transformers/all-MiniLM-L6-v2 (device=cpu)
+2026-03-17 02:05:32.977 | INFO     | embedding_layer.embedder:_load:81 - Model loaded — dim=384
+2026-03-17 02:05:33.742 | DEBUG    | vector_database.vector_store:index:86 - FAISS: indexed 16 chunks (total=16)
+2026-03-17 02:05:33.742 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 1/10: What is retrieval-augmented generation?...
+2026-03-17 02:05:33.759 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 3 chunks in 0.017s
+2026-03-17 02:05:52.338 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 18.579s
+2026-03-17 02:05:52.339 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 2/10: What are the main chunking strategies used in RAG pipelines?...
+2026-03-17 02:05:52.375 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 3 chunks in 0.036s
+2026-03-17 02:05:57.838 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 5.462s
+2026-03-17 02:05:57.838 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 3/10: What is the role of embedding models in RAG?...
+2026-03-17 02:05:57.853 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 3 chunks in 0.015s
+2026-03-17 02:06:08.639 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 10.786s
+2026-03-17 02:06:08.639 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 4/10: What is hybrid search in the context of RAG?...
+2026-03-17 02:06:08.651 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 3 chunks in 0.012s
+2026-03-17 02:06:20.355 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 11.704s
+2026-03-17 02:06:20.355 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 5/10: What is the faithfulness metric in RAG evaluation?...
+2026-03-17 02:06:20.371 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 3 chunks in 0.015s
+2026-03-17 02:06:27.430 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 7.059s
+2026-03-17 02:06:27.430 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 6/10: What is context precision in RAG evaluation?...
+2026-03-17 02:06:27.443 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 3 chunks in 0.013s
+2026-03-17 02:06:32.752 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 5.309s
+2026-03-17 02:06:32.752 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 7/10: What models does the RAG benchmark framework support for loc...
+2026-03-17 02:06:32.764 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 3 chunks in 0.012s
+2026-03-17 02:06:37.861 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 5.097s
+2026-03-17 02:06:37.861 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 8/10: What OCR engines are supported in the benchmarking framework...
+2026-03-17 02:06:37.878 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 3 chunks in 0.017s
+2026-03-17 02:06:43.193 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 5.315s
+2026-03-17 02:06:43.194 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 9/10: What vector databases are supported in the framework?...
+2026-03-17 02:06:43.206 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 3 chunks in 0.012s
+2026-03-17 02:06:47.778 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 4.572s
+2026-03-17 02:06:47.779 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 10/10: What is multi-query retrieval?...
+2026-03-17 02:06:47.791 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 3 chunks in 0.012s
+2026-03-17 02:06:55.192 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 7.401s
+2026-03-17 02:07:52.109 | INFO     | results_storage.database:insert_experiment:142 - Experiment logged: 4ac2b5b3-d2a5-4d52-9a0d-6ca92932302e
+2026-03-17 02:07:52.111 | INFO     | experiment_runner.runner:run:85 - All experiments completed. Total stored: 1
+2026-03-17 02:08:59.489 | DEBUG    | results_storage.database:_init_db:106 - Database ready: results_storage\experiments.db
+2026-03-17 02:08:59.503 | INFO     | results_storage.exporter:export_summary:77 - Exported summary (1 rows) → results_storage\exports\summary_20260317_020859.csv
+2026-03-17 02:33:51.829 | INFO     | __main__:run:79 - config: config\default_config.yaml
+2026-03-17 02:33:51.830 | INFO     | __main__:run:80 - project: RAG Benchmarking Framework
+2026-03-17 02:33:54.797 | DEBUG    | results_storage.database:_init_db:106 - Database ready: results_storage\experiments.db
+2026-03-17 02:33:54.797 | INFO     | experiment_runner.runner:_load_evaluation_dataset:284 - Loaded 10 evaluation questions
+2026-03-17 02:33:54.800 | INFO     | experiment_runner.runner:run:63 - Starting experiments: 500 combinations to run
+2026-03-17 02:33:54.800 | INFO     | experiment_runner.runner:run:68 - [1/500] ocr=tesseract | chunk=fixed(256) | emb=bge | db=chroma | ret=basic | llm=mistral
+2026-03-17 02:33:54.801 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\attention-is-all-you-need.pdf (ext=.pdf)
+2026-03-17 02:33:54.801 | WARNING  | data_ingestion.document_loader:_load_pdf:104 - PyMuPDF not installed, falling back to pdfplumber
+2026-03-17 02:33:54.801 | WARNING  | data_ingestion.document_loader:load_directory:85 - Skipping data\documents\attention-is-all-you-need.pdf: No module named 'pdfplumber'
+2026-03-17 02:33:54.802 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Google.txt (ext=.txt)
+2026-03-17 02:33:54.803 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Google.txt (232201 chars)
+2026-03-17 02:33:54.846 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Microsoft.txt (ext=.txt)
+2026-03-17 02:33:54.847 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Microsoft.txt (201014 chars)
+2026-03-17 02:33:54.880 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Nvidia.txt (ext=.txt)
+2026-03-17 02:33:54.880 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Nvidia.txt (148417 chars)
+2026-03-17 02:33:54.906 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\rag_overview.txt (ext=.txt)
+2026-03-17 02:33:54.907 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: rag_overview.txt (7254 chars)
+2026-03-17 02:33:54.909 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\SpaceX.txt (ext=.txt)
+2026-03-17 02:33:54.910 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: SpaceX.txt (206132 chars)
+2026-03-17 02:33:54.947 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Tesla.txt (ext=.txt)
+2026-03-17 02:33:54.948 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Tesla.txt (299196 chars)
+2026-03-17 02:34:10.806 | INFO     | embedding_layer.embedder:_load:78 - Loading embedding model: BAAI/bge-base-en-v1.5 (device=cpu)
+2026-03-17 02:36:20.490 | INFO     | embedding_layer.embedder:_load:81 - Model loaded — dim=768
+2026-03-17 02:41:33.575 | INFO     | __main__:dashboard:134 - Launching dashboard at http://localhost:8501
+2026-03-17 02:42:52.534 | DEBUG    | vector_database.vector_store:_ensure_collection:132 - Chroma collection ready: rag_bench
+2026-03-17 02:42:55.332 | DEBUG    | vector_database.vector_store:index:145 - Chroma: indexed 5309 chunks
+2026-03-17 02:42:55.332 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 1/10: What is retrieval-augmented generation?...
+2026-03-17 02:42:55.398 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 5 chunks in 0.066s
+2026-03-17 02:43:11.115 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 15.716s
+2026-03-17 02:43:11.115 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 2/10: What are the main chunking strategies used in RAG pipelines?...
+2026-03-17 02:43:11.160 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 5 chunks in 0.045s
+2026-03-17 02:43:17.316 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 6.156s
+2026-03-17 02:43:17.317 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 3/10: What is the role of embedding models in RAG?...
+2026-03-17 02:43:17.359 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 5 chunks in 0.042s
+2026-03-17 02:43:24.658 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 7.299s
+2026-03-17 02:43:24.658 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 4/10: What is hybrid search in the context of RAG?...
+2026-03-17 02:43:24.703 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 5 chunks in 0.045s
+2026-03-17 02:43:34.044 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 9.340s
+2026-03-17 02:43:34.044 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 5/10: What is the faithfulness metric in RAG evaluation?...
+2026-03-17 02:43:34.085 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 5 chunks in 0.041s
+2026-03-17 02:43:42.259 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 8.174s
+2026-03-17 02:43:42.259 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 6/10: What is context precision in RAG evaluation?...
+2026-03-17 02:43:42.300 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 5 chunks in 0.041s
+2026-03-17 02:43:49.122 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 6.822s
+2026-03-17 02:43:49.122 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 7/10: What models does the RAG benchmark framework support for loc...
+2026-03-17 02:43:49.165 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 5 chunks in 0.043s
+2026-03-17 02:43:54.898 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 5.733s
+2026-03-17 02:43:54.899 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 8/10: What OCR engines are supported in the benchmarking framework...
+2026-03-17 02:43:54.939 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 5 chunks in 0.040s
+2026-03-17 02:44:00.309 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 5.370s
+2026-03-17 02:44:00.309 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 9/10: What vector databases are supported in the framework?...
+2026-03-17 02:44:00.354 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 5 chunks in 0.044s
+2026-03-17 02:44:05.480 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 5.126s
+2026-03-17 02:44:05.480 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 10/10: What is multi-query retrieval?...
+2026-03-17 02:44:05.531 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 5 chunks in 0.050s
+2026-03-17 02:44:16.796 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 11.265s
+2026-03-17 02:45:11.972 | INFO     | results_storage.database:insert_experiment:142 - Experiment logged: 881c64af-7c6a-4c15-960b-57582b5bdd9a
+2026-03-17 02:45:11.972 | INFO     | experiment_runner.runner:run:68 - [2/500] ocr=tesseract | chunk=fixed(256) | emb=bge | db=chroma | ret=basic | llm=qwen
+2026-03-17 02:45:11.973 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\attention-is-all-you-need.pdf (ext=.pdf)
+2026-03-17 02:45:11.973 | WARNING  | data_ingestion.document_loader:_load_pdf:104 - PyMuPDF not installed, falling back to pdfplumber
+2026-03-17 02:45:11.974 | WARNING  | data_ingestion.document_loader:load_directory:85 - Skipping data\documents\attention-is-all-you-need.pdf: No module named 'pdfplumber'
+2026-03-17 02:45:11.974 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Google.txt (ext=.txt)
+2026-03-17 02:45:11.977 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Google.txt (232201 chars)
+2026-03-17 02:45:12.038 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Microsoft.txt (ext=.txt)
+2026-03-17 02:45:12.042 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Microsoft.txt (201014 chars)
+2026-03-17 02:45:12.081 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Nvidia.txt (ext=.txt)
+2026-03-17 02:45:12.083 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Nvidia.txt (148417 chars)
+2026-03-17 02:45:12.110 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\rag_overview.txt (ext=.txt)
+2026-03-17 02:45:12.110 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: rag_overview.txt (7254 chars)
+2026-03-17 02:45:12.112 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\SpaceX.txt (ext=.txt)
+2026-03-17 02:45:12.113 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: SpaceX.txt (206132 chars)
+2026-03-17 02:45:12.148 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Tesla.txt (ext=.txt)
+2026-03-17 02:45:12.150 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Tesla.txt (299196 chars)
+2026-03-17 02:45:12.216 | INFO     | embedding_layer.embedder:_load:78 - Loading embedding model: BAAI/bge-base-en-v1.5 (device=cpu)
+2026-03-17 02:51:52.313 | INFO     | __main__:run:79 - config: config\default_config.yaml
+2026-03-17 02:51:52.314 | INFO     | __main__:run:80 - project: RAG Benchmarking Framework
+2026-03-17 02:51:53.024 | DEBUG    | results_storage.database:_init_db:106 - Database ready: results_storage\experiments.db
+2026-03-17 02:51:53.024 | INFO     | experiment_runner.runner:_load_evaluation_dataset:284 - Loaded 10 evaluation questions
+2026-03-17 02:51:53.027 | INFO     | experiment_runner.runner:run:63 - Starting experiments: 500 combinations to run
+2026-03-17 02:51:53.027 | INFO     | experiment_runner.runner:run:68 - [1/500] ocr=tesseract | chunk=fixed(256) | emb=bge | db=chroma | ret=basic | llm=mistral
+2026-03-17 02:51:53.028 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\attention-is-all-you-need.pdf (ext=.pdf)
+2026-03-17 02:51:53.028 | WARNING  | data_ingestion.document_loader:_load_pdf:104 - PyMuPDF not installed, falling back to pdfplumber
+2026-03-17 02:51:53.029 | WARNING  | data_ingestion.document_loader:load_directory:85 - Skipping data\documents\attention-is-all-you-need.pdf: No module named 'pdfplumber'
+2026-03-17 02:51:53.029 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Google.txt (ext=.txt)
+2026-03-17 02:51:53.030 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Google.txt (232201 chars)
+2026-03-17 02:51:53.077 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Microsoft.txt (ext=.txt)
+2026-03-17 02:51:53.078 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Microsoft.txt (201014 chars)
+2026-03-17 02:51:53.117 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Nvidia.txt (ext=.txt)
+2026-03-17 02:51:53.118 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Nvidia.txt (148417 chars)
+2026-03-17 02:51:53.150 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\rag_overview.txt (ext=.txt)
+2026-03-17 02:51:53.151 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: rag_overview.txt (7254 chars)
+2026-03-17 02:51:53.154 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\SpaceX.txt (ext=.txt)
+2026-03-17 02:51:53.155 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: SpaceX.txt (206132 chars)
+2026-03-17 02:51:53.218 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Tesla.txt (ext=.txt)
+2026-03-17 02:51:53.219 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Tesla.txt (299196 chars)
+2026-03-17 02:52:01.019 | INFO     | embedding_layer.embedder:_load:78 - Loading embedding model: BAAI/bge-base-en-v1.5 (device=cpu)
+2026-03-17 02:52:04.207 | INFO     | embedding_layer.embedder:_load:81 - Model loaded — dim=768
+2026-03-17 02:52:55.040 | INFO     | __main__:dashboard:134 - Launching dashboard at http://localhost:8501
+2026-03-17 02:55:29.427 | INFO     | __main__:dashboard:134 - Launching dashboard at http://localhost:8501
+2026-03-17 03:18:19.555 | INFO     | __main__:run:79 - config: config\default_config.yaml
+2026-03-17 03:18:19.555 | INFO     | __main__:run:80 - project: RAG Benchmarking Framework
+2026-03-17 03:18:20.139 | DEBUG    | results_storage.database:_init_db:106 - Database ready: results_storage\experiments.db
+2026-03-17 03:18:20.139 | INFO     | experiment_runner.runner:_load_evaluation_dataset:284 - Loaded 10 evaluation questions
+2026-03-17 03:18:20.142 | INFO     | experiment_runner.runner:run:63 - Starting experiments: 500 combinations to run
+2026-03-17 03:18:20.142 | INFO     | experiment_runner.runner:run:68 - [1/500] ocr=tesseract | chunk=fixed(256) | emb=bge | db=chroma | ret=basic | llm=mistral
+2026-03-17 03:18:20.142 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\attention-is-all-you-need.pdf (ext=.pdf)
+2026-03-17 03:18:20.143 | WARNING  | data_ingestion.document_loader:_load_pdf:104 - PyMuPDF not installed, falling back to pdfplumber
+2026-03-17 03:18:20.143 | WARNING  | data_ingestion.document_loader:load_directory:85 - Skipping data\documents\attention-is-all-you-need.pdf: No module named 'pdfplumber'
+2026-03-17 03:18:20.143 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Google.txt (ext=.txt)
+2026-03-17 03:18:20.144 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Google.txt (232201 chars)
+2026-03-17 03:18:20.185 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Microsoft.txt (ext=.txt)
+2026-03-17 03:18:20.186 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Microsoft.txt (201014 chars)
+2026-03-17 03:18:20.221 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Nvidia.txt (ext=.txt)
+2026-03-17 03:18:20.222 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Nvidia.txt (148417 chars)
+2026-03-17 03:18:20.249 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\rag_overview.txt (ext=.txt)
+2026-03-17 03:18:20.250 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: rag_overview.txt (7254 chars)
+2026-03-17 03:18:20.252 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\SpaceX.txt (ext=.txt)
+2026-03-17 03:18:20.252 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: SpaceX.txt (206132 chars)
+2026-03-17 03:18:20.288 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Tesla.txt (ext=.txt)
+2026-03-17 03:18:20.289 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Tesla.txt (299196 chars)
+2026-03-17 03:18:26.453 | INFO     | embedding_layer.embedder:_load:78 - Loading embedding model: BAAI/bge-base-en-v1.5 (device=cpu)
+2026-03-17 03:18:29.601 | INFO     | embedding_layer.embedder:_load:81 - Model loaded — dim=768
+2026-03-17 03:24:46.314 | DEBUG    | vector_database.vector_store:_ensure_collection:132 - Chroma collection ready: rag_bench
+2026-03-17 03:24:49.244 | DEBUG    | vector_database.vector_store:index:145 - Chroma: indexed 5309 chunks
+2026-03-17 03:24:49.244 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 1/10: What is retrieval-augmented generation?...
+2026-03-17 03:24:49.312 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 5 chunks in 0.068s

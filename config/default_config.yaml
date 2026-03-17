@@ -1,0 +1,136 @@
+# ============================================================
+# RAG Benchmarking Framework — Default Configuration
+# ============================================================
+# Edit this file to control which techniques are benchmarked.
+# The experiment_runner will create a cartesian product of all
+# enabled options and execute each combination automatically.
+
+project:
+  name: "RAG Benchmarking Framework"
+  version: "1.0.0"
+  output_dir: "results_storage"
+  db_file: "results_storage/experiments.db"
+  log_level: "INFO"
+
+# ── Data ────────────────────────────────────────────────────
+data:
+  documents_dir: "data/documents"
+  images_dir: "data/images"
+  evaluation_file: "data/evaluation/questions.json"
+
+# ── OCR ─────────────────────────────────────────────────────
+ocr:
+  engines:
+    - name: "tesseract"
+      enabled: true
+      lang: "eng+fra"
+    - name: "easyocr"
+      enabled: true
+      langs: ["en", "fr"]
+    - name: "paddleocr"
+      enabled: true
+      lang: "en"
+    - name: "doctr"
+      enabled: true
+
+# ── Text Processing ──────────────────────────────────────────
+text_processing:
+  cleaning:
+    normalize_unicode: true
+    remove_extra_whitespace: true
+    remove_control_chars: true
+
+  chunking:
+    strategies:
+      - name: "fixed"
+        enabled: true
+      - name: "recursive"
+        enabled: true
+      - name: "sliding_window"
+        enabled: true
+      - name: "semantic"
+        enabled: true
+
+    chunk_sizes: [256, 512, 1024]
+    chunk_overlap: 50
+
+# ── Embeddings ───────────────────────────────────────────────
+embeddings:
+  models:
+    - name: "bge"
+      model_id: "BAAI/bge-base-en-v1.5"
+      enabled: true
+    - name: "e5"
+      model_id: "intfloat/e5-base-v2"
+      enabled: true
+    - name: "instructor"
+      model_id: "hkunlp/instructor-base"
+      enabled: true
+    - name: "minilm"
+      model_id: "sentence-transformers/all-MiniLM-L6-v2"
+      enabled: true
+  batch_size: 32
+  device: "cpu"  # or "cuda"
+
+# ── Vector Databases ─────────────────────────────────────────
+vector_databases:
+  stores:
+    - name: "chroma"
+      enabled: true
+      persist_dir: "results_storage/chroma_store"
+    - name: "faiss"
+      enabled: true
+    - name: "qdrant"
+      enabled: true
+      location: ":memory:"
+
+# ── Retrieval ────────────────────────────────────────────────
+retrieval:
+  top_k: 5
+  strategies:
+    - name: "basic"
+      enabled: true
+    - name: "reranking"
+      enabled: true
+      reranker_model: "cross-encoder/ms-marco-MiniLM-L-6-v2"
+    - name: "hybrid"
+      enabled: true
+      bm25_weight: 0.4
+      vector_weight: 0.6
+    - name: "multi_query"
+      enabled: true
+      num_queries: 3
+
+# ── LLM Models ───────────────────────────────────────────────
+llm:
+  provider: "ollama"
+  base_url: "http://localhost:11434"
+  models:
+    - name: "mistral"
+      enabled: true
+    - name: "qwen"
+      enabled: true
+    - name: "llama3.2"
+      enabled: true
+  timeout: 120
+  max_tokens: 512
+  temperature: 0.1
+
+# ── Evaluation ───────────────────────────────────────────────
+evaluation:
+  metrics:
+    - "precision_at_k"
+    - "recall_at_k"
+    - "mrr"
+    - "faithfulness"
+    - "answer_relevancy"
+    - "context_precision"
+    - "context_recall"
+  top_k: 5
+  judge_model: "mistral"   # LLM used as judge for RAG metrics
+
+# ── Experiment Runner ─────────────────────────────────────────
+experiment_runner:
+  max_experiments: 500     # safety cap
+  parallel: false          # set true to use multiprocessing
+  save_on_failure: true    # log partial results on error

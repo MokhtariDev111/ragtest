@@ -1,0 +1,108 @@
+# RAG Benchmarking Framework — Fast Experiment Config
+# Use this for quick smoke tests (1 option per stage)
+
+project:
+  name: "RAG Benchmark - Fast Run"
+  version: "1.0.0"
+  output_dir: "results_storage"
+  db_file: "results_storage/experiments.db"
+  log_level: "DEBUG"
+
+data:
+  documents_dir: "data/documents"
+  images_dir: "data/images"
+  evaluation_file: "data/evaluation/questions.json"
+
+ocr:
+  engines:
+    - name: "tesseract"
+      enabled: false
+    - name: "easyocr"
+      enabled: false
+    - name: "paddleocr"
+      enabled: false
+    - name: "doctr"
+      enabled: false
+
+text_processing:
+  cleaning:
+    normalize_unicode: true
+    remove_extra_whitespace: true
+    remove_control_chars: true
+  chunking:
+    strategies:
+      - name: "fixed"
+        enabled: true
+      - name: "recursive"
+        enabled: false
+      - name: "sliding_window"
+        enabled: false
+      - name: "semantic"
+        enabled: false
+    chunk_sizes: [512]
+    chunk_overlap: 50
+
+embeddings:
+  models:
+    - name: "minilm"
+      model_id: "sentence-transformers/all-MiniLM-L6-v2"
+      enabled: true
+    - name: "bge"
+      model_id: "BAAI/bge-base-en-v1.5"
+      enabled: false
+    - name: "e5"
+      model_id: "intfloat/e5-base-v2"
+      enabled: false
+    - name: "instructor"
+      model_id: "hkunlp/instructor-base"
+      enabled: false
+  batch_size: 32
+  device: "cpu"
+
+vector_databases:
+  stores:
+    - name: "faiss"
+      enabled: true
+    - name: "chroma"
+      enabled: false
+    - name: "qdrant"
+      enabled: false
+
+retrieval:
+  top_k: 3
+  strategies:
+    - name: "basic"
+      enabled: true
+    - name: "reranking"
+      enabled: false
+    - name: "hybrid"
+      enabled: false
+    - name: "multi_query"
+      enabled: false
+
+llm:
+  provider: "ollama"
+  base_url: "http://localhost:11434"
+  models:
+    - name: "mistral"
+      enabled: true
+    - name: "qwen"
+      enabled: false
+    - name: "llama3.2"
+      enabled: false
+  timeout: 120
+  max_tokens: 256
+  temperature: 0.1
+
+evaluation:
+  metrics:
+    - "precision_at_k"
+    - "recall_at_k"
+    - "answer_relevancy"
+  top_k: 3
+  judge_model: "mistral"
+
+experiment_runner:
+  max_experiments: 10
+  parallel: false
+  save_on_failure: true
