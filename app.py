@@ -22,10 +22,14 @@ from text_processing.text_cleaner import TextCleaner
 from text_processing.chunker import get_chunker
 from embedding_layer.embedder import get_embedder
 from vector_database.vector_store import get_vector_store
+from vector_database.graph_store import LocalGraphStore
+from data_ingestion.knowledge_extractor import KnowledgeExtractor
 from retrieval_system.retrievers import get_retriever
 from llm_generation.llm_interface import get_llm
 from llm_generation.prompt_builder import PromptBuilder
 from llm_generation.answer_generator import AnswerGenerator
+from evaluation_framework.rag_metrics import compute_faithfulness, compute_answer_relevancy, compute_context_precision, compute_context_recall
+import streamlit.components.v1 as components
 
 # --- Dashboard Imports ---
 from results_storage.database import ExperimentDatabase
@@ -72,9 +76,9 @@ st.markdown("""
 # CACHING & HOT-SWAPPING LOGIC
 # ==========================================
 @st.cache_resource(show_spinner="Booting AI Engine...")
-def init_dynamic_rag(chunker_type, chunk_size, embedder_type, db_type, llm_type):
+def init_dynamic_rag(chunker_type, chunk_size, embedder_type, db_type, llm_type, retrieval_type="basic"):
     """Initializes the RAG components based on user selection."""
-    logger.info(f"Hot-swapping config: {chunker_type}, {embedder_type}, {db_type}, {llm_type}")
+    logger.info(f"Hot-swapping config: {chunker_type}, {embedder_type}, {db_type}, {llm_type}, {retrieval_type}")
     
     # 1. Chunker
     chunker = get_chunker(chunker_type, chunk_size=int(chunk_size), chunk_overlap=50)
@@ -89,14 +93,25 @@ def init_dynamic_rag(chunker_type, chunk_size, embedder_type, db_type, llm_type)
     # 4. LLM
     llm = get_llm(llm_type)
     
-    # 5. Pipeline Setup
-    retriever = get_retriever("basic", embedder=embedder, store=vector_store)
+    # 5. Graph Store & Extractor
+    graph_dir = f"results_storage/superapp_graph"
+    graph_store = LocalGraphStore(persist_dir=graph_dir)
+    extractor = KnowledgeExtractor(llm=llm)
+    
+    # 6. Pipeline Setup
+    retriever = get_retriever(
+        retrieval_type, 
+        embedder=embedder, 
+        store=vector_store,
+        llm_generate_fn=llm.generate,
+        graph_store=graph_store
+    )
     prompt_builder = PromptBuilder(language="en")
     generator = AnswerGenerator(retriever=retriever, llm=llm, prompt_builder=prompt_builder, top_k=5)
     
-    return chunker, embedder, vector_store, generator
+    return chunker, embedder, vector_store, graph_store, extractor, generator
 
-def ingest_documents_ui(chunker, embedder, vector_store):
+def ingest_documents_ui(chunker, embedder, vector_store, graph_store, extractor):
     """Ingests data/documents into the currently selected Vector DB."""
     st.info("Ingesting `data/documents/` into the new Vector Database... This may take a minute.")
     progress = st.progress(0)
@@ -115,13 +130,21 @@ def ingest_documents_ui(chunker, embedder, vector_store):
         st.error("No documents found in `data/documents/`!")
         return False
         
-    full_text = "\\n\\n".join(raw_texts)
+    full_text = "\n\n".join(raw_texts)
     chunks = chunker.split(full_text)
     
     with st.spinner(f"Generating embeddings for {len(chunks)} chunks using {embedder.name}..."):
         chunk_vecs = embedder.embed(chunks)
         vector_store.clear()  # reset this specific DB
         vector_store.index(chunks, chunk_vecs)
+        
+    with st.spinner("Extracting Knowledge Graph Entities & Edges (this takes time)..."):
+        graph_store.clear()
+        triples = extractor.process_chunks(chunks)
+        for t in triples:
+            graph_store.add_edge(t["source"], t["target"], t["relation"], t["context"])
+        graph_store.save_to_disk()
+
         
     progress.progress(1.0)
     st.success(f"✅ Successfully indexed {len(chunks)} chunks into {vector_store.name.upper()}!")
@@ -136,17 +159,17 @@ def render_chat_page():
     
     # --- Top Config Bar ---
     with st.expander("⚙️ Dynamic RAG Configuration (Hot-Swap Models)", expanded=False):
-        c1, c2, c3, c4, c5 = st.columns(5)
-        # We use session state to remember choices across tab switches
-        chunker_type = c1.selectbox("Chunker", ["recursive", "fixed", "semantic", "sliding_window"], index=0)
-        chunk_size = c2.selectbox("Chunk Size", [256, 512, 1024], index=1)
-        embedder_type = c3.selectbox("Embedder", ["minilm", "bge", "e5", "instructor"], index=0)
-        db_type = c4.selectbox("Vector DB", ["chroma", "faiss"], index=0)
-        llm_type = c5.selectbox("LLM Model", ["mistral", "llama3.2", "qwen"], index=0)
+        c1, c2, c3, c4, c5, c6 = st.columns(6)
+        chunker_type = c1.selectbox("Chunker", ["recursive", "fixed", "semantic", "sliding_window"], index=0, key="cfg_chunker")
+        chunk_size = c2.selectbox("Chunk Size", [256, 512, 1024], index=1, key="cfg_chunk_size")
+        embedder_type = c3.selectbox("Embedder", ["minilm", "bge", "e5", "instructor"], index=0, key="cfg_embed")
+        db_type = c4.selectbox("Vector DB", ["chroma", "faiss"], index=0, key="cfg_db")
+        retrieval_type = c5.selectbox("Retriever", ["basic", "hybrid", "hybrid_graph", "graph", "multi_query"], index=2, key="cfg_retriever")
+        llm_type = c6.selectbox("LLM Model", ["mistral", "llama3.2", "qwen"], index=0, key="cfg_llm")
         
     # --- Initialize Engine ---
-    chunker, embedder, vector_store, generator = init_dynamic_rag(
-        chunker_type, chunk_size, embedder_type, db_type, llm_type
+    chunker, embedder, vector_store, graph_store, extractor, generator = init_dynamic_rag(
+        chunker_type, chunk_size, embedder_type, db_type, llm_type, retrieval_type
     )
     
     # --- Index Management ---
@@ -154,18 +177,47 @@ def render_chat_page():
     if doc_count == 0:
         st.warning(f"⚠️ Vector DB ({db_type} + {embedder_type}) is empty. You must ingest documents before chatting.")
         if st.button("🚀 Ingest Documents Now", use_container_width=True):
-            if ingest_documents_ui(chunker, embedder, vector_store):
+            if ingest_documents_ui(chunker, embedder, vector_store, graph_store, extractor):
                 st.rerun()
         st.stop()
     else:
-        st.caption(f"🟢 **Status:** Ready | **DB:** {db_type.upper()} ({doc_count} chunks) | **Embedder:** {embedder_type.upper()} | **LLM:** {llm_type.upper()}")
+        graph_nodes = graph_store.get_node_count()
+        st.caption(f"🟢 **Status:** Ready | **DB:** {db_type.upper()} ({doc_count} chunks) | **Graph:** {graph_nodes} Nodes | **LLM:** {llm_type.upper()}")
         
     # --- Chat UI ---
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = [{"role": "assistant", "content": "Hello! Ask me anything about your documents."}]
 
     for msg in st.session_state.chat_history:
-        st.chat_message(msg["role"]).write(msg["content"])
+        if msg["role"] == "user":
+            st.chat_message("user").write(msg["content"])
+        else:
+            with st.chat_message("assistant"):
+                if "latency" in msg:
+                    c1, c2 = st.columns([0.85, 0.15])
+                    with c1:
+                        st.write(msg["content"])
+                        with st.expander("🔍 Show Retrieved Context"):
+                            st.markdown(f"**Generated by:** `{msg.get('llm_type','')}` | **Strategy:** `{msg.get('retrieval_type','')}`")
+                            for i, chunk in enumerate(msg.get("retrieved_chunks", [])):
+                                st.markdown(f"**Chunk {i+1}:**\n{chunk}")
+                                st.divider()
+                    with c2:
+                        st.markdown(f"""
+                        <div style="text-align: right; color: #888; font-size: 0.8rem; background: #1e293b; padding: 10px; border-radius: 8px;">
+                        <b title="Total time to retrieve chunks and generate the answer">⏱️ {msg['latency']:.1f}s</b><br>
+                        <span title="Time spent fetching relevant chunks from the database" style="color:#64748b;">Ret: {msg['retrieval_latency']:.1f}s</span><br>
+                        <span title="Time spent generating text using the LLM" style="color:#64748b;">Gen: {msg['gen_latency']:.1f}s</span><br>
+                        <span title="Number of chunks retrieved as context" style="color:#64748b;">📄 {msg['chunks_used']} chunks</span>
+                        <hr style="margin: 5px 0; border-color: #334155;">
+                        <span title="How grounded the generated answer is to the retrieved context chunks (1.0 = Fully Fact-Based)" style="color:#6ee7b7;">Faith: {msg.get('faithfulness', 0.0):.2f}</span><br>
+                        <span title="How semantically relevant the generated answer is to the user's question (1.0 = Perfect Answer)" style="color:#93c5fd;">Rel: {msg.get('relevancy', 0.0):.2f}</span><br>
+                        <span title="How many of the retrieved chunks were actually relevant to the question" style="color:#fcd34d;">Ctx Prec: {msg.get('context_precision', 0.0):.2f}</span><br>
+                        <span title="How much of the answer's information was found in the context" style="color:#f9a8d4;">Ctx Rec: {msg.get('context_recall', 0.0):.2f}</span>
+                        </div>
+                        """, unsafe_allow_html=True)
+                else:
+                    st.write(msg["content"])
 
     if prompt := st.chat_input("Ask a question about the PDFs..."):
         st.session_state.chat_history.append({"role": "user", "content": prompt})
@@ -178,16 +230,78 @@ def render_chat_page():
                     result = generator.answer_batch([prompt])[0]
                     answer = result["answer"]
                     latency = time.time() - start_time
+                    retrieval_latency = result.get("retrieval_latency", 0.0)
+                    gen_latency = latency - retrieval_latency
+                    chunks_used = len(result['retrieved_chunks'])
                     
-                    st.write(answer)
-                    
-                    with st.expander(f"🔍 Show Retrieved Context (Retrieved in {result['retrieval_latency']:.2f}s | Total: {latency:.2f}s)"):
-                        st.markdown(f"**Generated by:** {llm_type}")
-                        for i, chunk in enumerate(result["retrieved_chunks"]):
-                            st.markdown(f"**Chunk {i+1}:**\\n{chunk}")
-                            st.divider()
+                    with st.spinner(f"Evaluating answer accuracy using {llm_type}..."):
+                        # Run the evaluation directly on the generated text!
+                        faithfulness = compute_faithfulness(answer, result["retrieved_chunks"], llm_judge=generator.llm.generate)
+                        relevancy = compute_answer_relevancy(prompt, answer, embedding_fn=embedder.embed, llm_judge=generator.llm.generate)
+                        ctx_precision = compute_context_precision(prompt, result["retrieved_chunks"], llm_judge=generator.llm.generate)
+                        ctx_recall = compute_context_recall(answer, result["retrieved_chunks"]) # Use answer as proxy for expected info
+                        
+                    c1, c2 = st.columns([0.85, 0.15])
+                    with c1:
+                        st.write(answer)
+                        with st.expander("🔍 Show Retrieved Context"):
+                            st.markdown(f"**Generated by:** `{llm_type}` | **Strategy:** `{retrieval_type}`")
+                            for i, chunk in enumerate(result["retrieved_chunks"]):
+                                st.markdown(f"**Chunk {i+1}:**\n{chunk}")
+                                st.divider()
+                    with c2:
+                        st.markdown(f"""
+                        <div style="text-align: right; color: #888; font-size: 0.8rem; background: #1e293b; padding: 10px; border-radius: 8px;">
+                        <b title="Total time to retrieve chunks and generate the answer">⏱️ {latency:.1f}s</b><br>
+                        <span title="Time spent fetching relevant chunks from the database" style="color:#64748b;">Ret: {retrieval_latency:.1f}s</span><br>
+                        <span title="Time spent generating text using the LLM" style="color:#64748b;">Gen: {gen_latency:.1f}s</span><br>
+                        <span title="Number of chunks retrieved as context" style="color:#64748b;">📄 {chunks_used} chunks</span>
+                        <hr style="margin: 5px 0; border-color: #334155;">
+                        <span title="How grounded the generated answer is to the retrieved context chunks (1.0 = Fully Fact-Based)" style="color:#6ee7b7;">Faith: {faithfulness:.2f}</span><br>
+                        <span title="How semantically relevant the generated answer is to the user's question (1.0 = Perfect Answer)" style="color:#93c5fd;">Rel: {relevancy:.2f}</span><br>
+                        <span title="How many of the retrieved chunks were actually relevant to the question" style="color:#fcd34d;">Ctx Prec: {ctx_precision:.2f}</span><br>
+                        <span title="How much of the answer's information was found in the context" style="color:#f9a8d4;">Ctx Rec: {ctx_recall:.2f}</span>
+                        </div>
+                        """, unsafe_allow_html=True)
                             
-                    st.session_state.chat_history.append({"role": "assistant", "content": answer})
+                    st.session_state.chat_history.append({
+                        "role": "assistant", 
+                        "content": answer,
+                        "latency": latency,
+                        "retrieval_latency": retrieval_latency,
+                        "gen_latency": gen_latency,
+                        "chunks_used": chunks_used,
+                        "retrieved_chunks": result['retrieved_chunks'],
+                        "llm_type": llm_type,
+                        "retrieval_type": retrieval_type,
+                        "faithfulness": faithfulness,
+                        "relevancy": relevancy,
+                        "context_precision": ctx_precision,
+                        "context_recall": ctx_recall
+                    })
+                    
+                    # Log explicitly to the DB so it shows up in Analytics Explorer as well
+                    db = ExperimentDatabase("results_storage/experiments.db")
+                    db.insert_experiment({
+                        "experiment_id": f"live_chat_{int(time.time())}",
+                        "ocr_engine": "none",
+                        "chunking_strategy": str(chunker_type),
+                        "chunk_size": int(chunk_size),
+                        "embedding_model": str(embedder_type),
+                        "vector_db": str(db_type),
+                        "retrieval_strategy": str(retrieval_type),
+                        "llm_model": str(llm_type),
+                        "total_latency_s": latency,
+                        "retrieval_latency_s": retrieval_latency,
+                        "generation_latency_s": gen_latency,
+                        "faithfulness": faithfulness,
+                        "answer_relevancy": relevancy,
+                        "context_precision": ctx_precision,
+                        "context_recall": ctx_recall,
+                        "num_questions": 1,
+                        "status": "completed"
+                    })
+                    
                 except Exception as e:
                     st.error(f"Error generating answer: {e}")
 
@@ -242,7 +356,7 @@ def render_analytics():
         st.divider()
 
         # Inject the core tabs from dashboard/app.py
-        tabs = st.tabs(["📋 Results Table", "🎯 Accuracy", "⚡ Latency", "📈 Metrics Deep Dive", "🏆 Master Rankings"])
+        tabs = st.tabs(["📋 Results Table", "🎯 Accuracy", "⚡ Latency", "🏆 Master Rankings"])
         with tabs[0]:
             dashboard_old._tab_results_table(df)
         with tabs[1]:
@@ -250,8 +364,6 @@ def render_analytics():
         with tabs[2]:
             dashboard_old._tab_latency(df)
         with tabs[3]:
-            dashboard_old._tab_metrics(df)
-        with tabs[4]:
             dashboard_old._tab_rankings(df)
             
     except Exception as e:
@@ -261,15 +373,13 @@ def render_analytics():
 # MAIN ROUTER
 # ==========================================
 def main():
-    st.markdown("<div class='main-header'>PFE RAG Super-App</div>", unsafe_allow_html=True)
+    st.markdown("<div class='main-header'>TESTING</div>", unsafe_allow_html=True)
     st.markdown("<div class='sub-header'>Unified Research Platform: Chat, Benchmark, Analyze</div>", unsafe_allow_html=True)
     
     st.sidebar.title("Navigation")
     page = st.sidebar.radio("Go to module", ["💬 Live AI Chat", "🧪 Experiment Lab", "📊 Analytics Explorer"])
     
     st.sidebar.markdown("---")
-    st.sidebar.info("🎓 **End of Studies Project**\\n\\nModular RAG Benchmarking Framework")
-    
     if page == "💬 Live AI Chat":
         render_chat_page()
     elif page == "🧪 Experiment Lab":

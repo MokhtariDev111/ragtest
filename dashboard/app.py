@@ -130,11 +130,10 @@ def main():
     st.divider()
 
     # ── Tabs ───────────────────────────────────────────────────────────────────
-    tab1, tab2, tab3, tab4, tab5 = st.tabs([
+    tab1, tab2, tab3, tab4 = st.tabs([
         "📋 Results Table",
         "🎯 Accuracy Comparison",
         "⚡ Latency Analysis",
-        "📈 Metrics Deep Dive",
         "🏆 Model Rankings",
     ])
 
@@ -148,9 +147,6 @@ def main():
         _tab_latency(df)
 
     with tab4:
-        _tab_metrics(df)
-
-    with tab5:
         _tab_rankings(df)
 
     # ── Auto-refresh ───────────────────────────────────────────────────────────
@@ -210,7 +206,14 @@ def _tab_accuracy(df: pd.DataFrame):
         st.info(f"No data available for metric: {metric_col}")
         return
 
-    agg = df.groupby(group_by)[metric_col].mean().reset_index().sort_values(metric_col, ascending=False)
+    # Safely drop NaNs for the selected metric so it doesn't break groupings
+    valid_df = df.dropna(subset=[metric_col])
+    
+    if valid_df.empty:
+        st.info(f"No completed evaluations found for {metric_col}.")
+        return
+
+    agg = valid_df.groupby(group_by)[metric_col].mean().reset_index().sort_values(metric_col, ascending=False)
     fig = px.bar(
         agg,
         x=group_by,
@@ -282,44 +285,7 @@ def _tab_latency(df: pd.DataFrame):
         st.plotly_chart(fig2, use_container_width=True)
 
 
-def _tab_metrics(df: pd.DataFrame):
-    st.markdown("### RAG Metrics Deep Dive")
 
-    rag_metrics = [c for c in ["faithfulness", "answer_relevancy",
-                                "context_precision", "context_recall"]
-                   if c in df.columns]
-
-    if not rag_metrics:
-        st.info("No RAG metric data available.")
-        return
-
-    group_by = st.selectbox(
-        "Compare by",
-        ["llm_model", "retrieval_strategy", "embedding_model", "chunking_strategy"],
-        key="metric_group",
-    )
-
-    groups = df[group_by].dropna().unique().tolist()
-    if len(groups) == 0:
-        return
-
-    fig = go.Figure()
-    for g in groups:
-        sub = df[df[group_by] == g]
-        means = [sub[m].mean() for m in rag_metrics]
-        fig.add_trace(go.Scatterpolar(
-            r=means,
-            theta=[m.replace("_", " ").title() for m in rag_metrics],
-            fill="toself",
-            name=str(g),
-        ))
-    fig.update_layout(
-        polar=dict(radialaxis=dict(visible=True, range=[0, 1])),
-        showlegend=True,
-        title=f"RAG Metrics Radar by {group_by.replace('_', ' ').title()}",
-        height=500,
-    )
-    st.plotly_chart(fig, use_container_width=True)
 
 
 def _tab_rankings(df: pd.DataFrame):

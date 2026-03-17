@@ -100,7 +100,6 @@ evaluation:
     - "recall_at_k"
     - "answer_relevancy"
   top_k: 3
-  judge_model: "mistral"
 
 experiment_runner:
   max_experiments: 10

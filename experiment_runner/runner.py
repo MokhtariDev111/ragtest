@@ -241,31 +241,54 @@ class ExperimentRunner:
 
         # ── 7. Evaluation ──────────────────────────────────────────────────────
         judge_fn = None
-        judge_model = cfg.get("evaluation", {}).get("judge_model", "mistral")
-        if judge_model:
-            try:
-                judge_llm = get_llm(judge_model, base_url=llm_config.get("base_url", "http://localhost:11434"))
-                judge_fn = judge_llm.generate
-            except Exception:
-                pass
+        # Use the currently tested LLM model as the judge for its own answers, 
+        # unless a specific universal judge was set in config.
+        judge_model = cfg.get("evaluation", {}).get("judge_model")
+        if not judge_model:
+            judge_model = combo["llm_model"]
+            
+        try:
+            judge_llm = get_llm(judge_model, base_url=llm_config.get("base_url", "http://localhost:11434"))
+            judge_fn = judge_llm.generate
+        except Exception:
+            pass
 
         embedding_fn = embedder.embed
+        
+        # Prepare ground truth context if available
+        relevant_chunks_list = [q.get("relevant_chunks", []) for q in self.evaluation_dataset]
 
+        # 7.1 Retrieval Metrics
+        retrieval_metrics = compute_retrieval_metrics(
+            retrieved_list=retrieved_chunks_list,
+            relevant_list=relevant_chunks_list,
+            k=top_k
+        )
+
+        # 7.2 RAG Metrics
         rag_metrics = compute_rag_metrics(
             questions=questions,
             answers=answers,
             retrieved_chunks_list=retrieved_chunks_list,
             expected_answers=expected_answers,
+            relevant_chunks_list=relevant_chunks_list,
             llm_judge=judge_fn,
             embedding_fn=embedding_fn,
         )
 
         return {
             **combo,
+            # Retrieval
+            "precision_at_k": retrieval_metrics.get(f"precision_at_{top_k}"),
+            "recall_at_k": retrieval_metrics.get(f"recall_at_{top_k}"),
+            "mrr": retrieval_metrics.get("mrr"),
+            "ndcg_at_k": retrieval_metrics.get(f"ndcg_at_{top_k}"),
+            # RAG
             "faithfulness": rag_metrics.get("faithfulness"),
             "answer_relevancy": rag_metrics.get("answer_relevancy"),
             "context_precision": rag_metrics.get("context_precision"),
             "context_recall": rag_metrics.get("context_recall"),
+            # Latency
             "retrieval_latency_s": round(mean_retrieval_s, 4),
             "generation_latency_s": round(mean_generation_s, 4),
             "total_latency_s": round(mean_total_s, 4),

@@ -154,38 +154,90 @@ def _heuristic_answer_relevancy(question: str, answer: str) -> float:
 # ── Context Precision ──────────────────────────────────────────────────────────
 
 def compute_context_precision(
+    question: str,
     retrieved_chunks: list[str],
-    relevant_chunks: list[str],
+    relevant_chunks: Optional[list[str]] = None,
+    llm_judge: Optional[Callable[[str], str]] = None,
 ) -> float:
     """
-    Fraction of retrieved chunks that are actually relevant.
-    Uses exact string matching (or overlap threshold).
+    Measure the signal-to-noise ratio in the retrieved context.
+    
+    If llm_judge is provided, it asks the LLM to identify relevant chunks.
+    Otherwise, it uses heuristic matching against relevant_chunks if provided.
     """
     if not retrieved_chunks:
         return 0.0
+
+    if llm_judge:
+        return _llm_context_precision(question, retrieved_chunks, llm_judge)
+
+    if not relevant_chunks:
+        return 0.0
+        
     relevant_set = set(relevant_chunks)
     hits = sum(1 for c in retrieved_chunks if c in relevant_set or
                any(_chunk_overlap(c, r) > 0.7 for r in relevant_set))
     return round(hits / len(retrieved_chunks), 4)
 
 
+def _llm_context_precision(
+    question: str,
+    retrieved_chunks: list[str],
+    llm_judge: Callable[[str], str],
+) -> float:
+    """Ask LLM to judge relevance of each chunk."""
+    hits = 0
+    # Judge only top 3 for speed in live chat
+    to_judge = retrieved_chunks[:3]
+    for chunk in to_judge:
+        prompt = (
+            "Determine if the following CHUNK is relevant to answering the QUESTION.\n"
+            "Output 'YES' or 'NO'.\n\n"
+            f"QUESTION: {question}\n"
+            f"CHUNK: {chunk[:500]}\n"
+            "RELEVANT:"
+        )
+        try:
+            res = llm_judge(prompt).strip().upper()
+            if "YES" in res:
+                hits += 1
+        except Exception:
+            pass
+    return round(hits / len(to_judge), 4) if to_judge else 0.0
+
+
 # ── Context Recall ─────────────────────────────────────────────────────────────
 
 def compute_context_recall(
+    expected_answer: str,
     retrieved_chunks: list[str],
-    relevant_chunks: list[str],
+    relevant_chunks: Optional[list[str]] = None,
 ) -> float:
     """
-    Fraction of ground-truth relevant chunks that appear in the retrieved set.
+    Measure if the retrieved context contains the information in the expected answer.
     """
-    if not relevant_chunks:
+    if not retrieved_chunks:
         return 0.0
-    hits = sum(
-        1 for r in relevant_chunks
-        if r in retrieved_chunks or
-           any(_chunk_overlap(r, c) > 0.7 for c in retrieved_chunks)
-    )
-    return round(hits / len(relevant_chunks), 4)
+        
+    if relevant_chunks:
+        hits = sum(
+            1 for r in relevant_chunks
+            if r in retrieved_chunks or
+               any(_chunk_overlap(r, c) > 0.7 for c in retrieved_chunks)
+        )
+        return round(hits / len(relevant_chunks), 4)
+
+    # Heuristic: Check if keywords from expected answer are in chunks
+    if not expected_answer:
+        return 0.0
+        
+    context = " ".join(retrieved_chunks).lower()
+    # Extract noun-like words (longer than 4 chars)
+    words = set(re.findall(r"\b\w{5,}\b", expected_answer.lower()))
+    if not words:
+        return 0.0
+    found = sum(1 for w in words if w in context)
+    return round(found / len(words), 4)
 
 
 def _chunk_overlap(a: str, b: str) -> float:
@@ -210,8 +262,6 @@ def compute_rag_metrics(
 ) -> dict:
     """
     Compute all RAG metrics over a batch of Q&A pairs.
-
-    Returns a dict with mean scores for all computed metrics.
     """
     faithfulness_scores = []
     relevancy_scores = []
@@ -231,17 +281,23 @@ def compute_rag_metrics(
                 llm_judge=llm_judge,
             )
         )
-        if relevant_chunks_list and i < len(relevant_chunks_list):
-            rel = relevant_chunks_list[i]
-            ctx_precision_scores.append(compute_context_precision(chunks, rel))
-            ctx_recall_scores.append(compute_context_recall(chunks, rel))
+        
+        # Improved Context Metrics
+        expected = expected_answers[i] if expected_answers and i < len(expected_answers) else ""
+        rel_chunks = relevant_chunks_list[i] if relevant_chunks_list and i < len(relevant_chunks_list) else None
+        
+        ctx_precision_scores.append(
+            compute_context_precision(question, chunks, relevant_chunks=rel_chunks, llm_judge=llm_judge)
+        )
+        ctx_recall_scores.append(
+            compute_context_recall(expected, chunks, relevant_chunks=rel_chunks)
+        )
 
     result = {
-        "faithfulness":    round(float(np.mean(faithfulness_scores)), 4),
-        "answer_relevancy": round(float(np.mean(relevancy_scores)), 4),
+        "faithfulness":    round(float(np.mean(faithfulness_scores)), 4) if faithfulness_scores else 0.0,
+        "answer_relevancy": round(float(np.mean(relevancy_scores)), 4) if relevancy_scores else 0.0,
+        "context_precision": round(float(np.mean(ctx_precision_scores)), 4) if ctx_precision_scores else 0.0,
+        "context_recall":    round(float(np.mean(ctx_recall_scores)), 4) if ctx_recall_scores else 0.0,
     }
-    if ctx_precision_scores:
-        result["context_precision"] = round(float(np.mean(ctx_precision_scores)), 4)
-        result["context_recall"]    = round(float(np.mean(ctx_recall_scores)), 4)
 
     return result

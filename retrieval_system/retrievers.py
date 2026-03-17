@@ -231,6 +231,100 @@ def _normalize(scores: np.ndarray) -> np.ndarray:
     return (scores - mn) / (mx - mn)
 
 
+# ── Graph Retriever ────────────────────────────────────────────────────────────
+
+class GraphRetriever(BaseRetriever):
+    """
+    Knowledge Graph retrieval. 
+    Uses the LLM to extract entities from the user query, then walks the LocalGraphStore
+    to find connected relationship paths.
+    """
+
+    name = "graph"
+
+    def __init__(
+        self,
+        embedder: BaseEmbedder,
+        store: BaseVectorStore,
+        llm_generate_fn,         # callable(prompt: str) -> str
+        graph_store=None         # LocalGraphStore instance
+    ):
+        self.embedder = embedder
+        self.store = store
+        self.llm_generate_fn = llm_generate_fn
+        self.graph_store = graph_store
+
+    def _extract_query_entities(self, query: str) -> list[str]:
+        prompt = (
+            "Extract the 3 most important entities (nouns/names) from this query. "
+            "Output ONLY the entities as a comma-separated list, nothing else:\n\n"
+            f"{query}"
+        )
+        try:
+            raw = self.llm_generate_fn(prompt)
+            return [e.strip().lower() for e in raw.split(",") if e.strip()]
+        except Exception as exc:
+            logger.warning(f"Entity extraction failed: {exc}")
+            return [query.strip().lower()]
+
+    def retrieve(self, query: str, top_k: int = 5) -> list[str]:
+        if not self.graph_store:
+            logger.warning("GraphRetriever used but no GraphStore provided! Falling back to basic vector search.")
+            vec = self.embedder.embed_single(query)
+            return self.store.query(vec, top_k=top_k)
+            
+        entities = self._extract_query_entities(query)
+        logger.debug(f"Graph Search Entities: {entities}")
+        
+        # Walk the graph 2 levels deep
+        paths = self.graph_store.query_neighborhood(entities, depth=2)
+        
+        if not paths:
+             # Fast fallback if graph misses
+             vec = self.embedder.embed_single(query)
+             return self.store.query(vec, top_k=top_k)
+             
+        # Return unique relationship paths (limit to arbitrary top_k * 5 for density)
+        return list(set(paths))[:top_k * 5]
+
+
+# ── Graph-Vector Hybrid Retriever ──────────────────────────────────────────────
+
+class GraphHybridRetriever(BaseRetriever):
+    """
+    The ultimate RAG retrieval: 
+    Gets Top-K chunks from the Vector database AND Top-N paths from the Graph DB,
+    and returns a combined list so the LLM has both semantic and relational context.
+    """
+
+    name = "hybrid_graph"
+
+    def __init__(
+        self,
+        embedder: BaseEmbedder,
+        store: BaseVectorStore,
+        llm_generate_fn,         # callable(prompt: str) -> str
+        graph_store=None         # LocalGraphStore instance
+    ):
+        self.vector_retriever = BasicRetriever(embedder, store)
+        self.graph_retriever = GraphRetriever(embedder, store, llm_generate_fn, graph_store)
+
+    def retrieve(self, query: str, top_k: int = 5) -> list[str]:
+        # 1. Get Semantic Vector chunks
+        vector_chunks = self.vector_retriever.retrieve(query, top_k=top_k)
+        
+        # 2. Get Relational Graph paths
+        graph_paths = self.graph_retriever.retrieve(query, top_k=top_k)
+        
+        # 3. Combine. Put graph paths first as they are highly dense facts.
+        combined = []
+        if graph_paths:
+            combined.append("KNOWLEDGE GRAPH FACTS:\n" + "\n".join(graph_paths))
+        
+        combined.extend(vector_chunks)
+        return combined
+
+
 # ── Factory ────────────────────────────────────────────────────────────────────
 
 _RETRIEVER_REGISTRY: dict[str, type[BaseRetriever]] = {
@@ -238,6 +332,8 @@ _RETRIEVER_REGISTRY: dict[str, type[BaseRetriever]] = {
     "reranking":   RerankerRetriever,
     "hybrid":      HybridRetriever,
     "multi_query": MultiQueryRetriever,
+    "graph":       GraphRetriever,
+    "hybrid_graph": GraphHybridRetriever,
 }
 
 
@@ -252,10 +348,10 @@ def get_retriever(
 
     Parameters
     ----------
-    name     : 'basic' | 'reranking' | 'hybrid' | 'multi_query'
+    name     : 'basic' | 'reranking' | 'hybrid' | 'multi_query' | 'graph' | 'hybrid_graph'
     embedder : an initialised BaseEmbedder
     store    : an initialised BaseVectorStore (already indexed)
-    **kwargs : forwarded to the retriever constructor
+    **kwargs : forwarded to the retriever constructor (like llm_generate_fn, graph_store)
     """
     name = name.lower()
     if name not in _RETRIEVER_REGISTRY:

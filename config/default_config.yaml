@@ -127,7 +127,6 @@ evaluation:
     - "context_precision"
     - "context_recall"
   top_k: 5
-  judge_model: "mistral"   # LLM used as judge for RAG metrics
 
 # ── Experiment Runner ─────────────────────────────────────────
 experiment_runner:
