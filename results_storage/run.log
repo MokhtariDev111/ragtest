@@ -375,3 +375,53 @@ chromadb.errors.InternalError: ValueError: Batch size of 5501 is greater than ma
 2026-03-17 03:47:52.566 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Tesla.txt (299196 chars)
 2026-03-17 03:48:03.571 | INFO     | embedding_layer.embedder:_load:78 - Loading embedding model: BAAI/bge-base-en-v1.5 (device=cpu)
 2026-03-17 03:48:06.686 | INFO     | embedding_layer.embedder:_load:81 - Model loaded — dim=768
+2026-03-17 03:55:37.284 | DEBUG    | vector_database.vector_store:_ensure_collection:132 - Chroma collection ready: rag_bench
+2026-03-17 03:55:40.482 | DEBUG    | vector_database.vector_store:index:155 - Chroma: indexed 5501 chunks in 2 batches
+2026-03-17 03:55:40.487 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 1/10: What is retrieval-augmented generation?...
+2026-03-17 03:55:40.563 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 5 chunks in 0.075s
+2026-03-17 03:55:49.697 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 9.134s
+2026-03-17 03:55:49.697 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 2/10: What are the main chunking strategies used in RAG pipelines?...
+2026-03-17 03:55:49.740 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 5 chunks in 0.042s
+2026-03-17 03:55:57.865 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 8.125s
+2026-03-17 03:55:57.865 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 3/10: What is the role of embedding models in RAG?...
+2026-03-17 03:55:57.905 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 5 chunks in 0.040s
+2026-03-17 03:56:06.328 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 8.423s
+2026-03-17 03:56:06.329 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 4/10: What is hybrid search in the context of RAG?...
+2026-03-17 03:56:06.373 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 5 chunks in 0.044s
+2026-03-17 03:56:16.279 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 9.906s
+2026-03-17 03:56:16.279 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 5/10: What is the faithfulness metric in RAG evaluation?...
+2026-03-17 03:56:16.325 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 5 chunks in 0.045s
+2026-03-17 03:56:24.473 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 8.147s
+2026-03-17 03:56:24.473 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 6/10: What is context precision in RAG evaluation?...
+2026-03-17 03:56:24.521 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 5 chunks in 0.048s
+2026-03-17 03:56:35.133 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 10.612s
+2026-03-17 03:56:35.134 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 7/10: What models does the RAG benchmark framework support for loc...
+2026-03-17 03:56:35.174 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 5 chunks in 0.040s
+2026-03-17 03:56:40.139 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 4.965s
+2026-03-17 03:56:40.139 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 8/10: What OCR engines are supported in the benchmarking framework...
+2026-03-17 03:56:40.179 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 5 chunks in 0.040s
+2026-03-17 03:56:53.518 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 13.339s
+2026-03-17 03:56:53.519 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 9/10: What vector databases are supported in the framework?...
+2026-03-17 03:56:53.561 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 5 chunks in 0.042s
+2026-03-17 03:56:58.202 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 4.641s
+2026-03-17 03:56:58.202 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 10/10: What is multi-query retrieval?...
+2026-03-17 03:56:58.243 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 5 chunks in 0.040s
+2026-03-17 03:57:05.997 | DEBUG    | llm_generation.answer_generator:answer:73 - LLM generated answer in 7.754s
+2026-03-17 03:58:15.072 | INFO     | results_storage.database:insert_experiment:142 - Experiment logged: 63127327-2b9e-4fdf-b9aa-142886af9845
+2026-03-17 03:58:15.072 | INFO     | experiment_runner.runner:run:68 - [2/500] ocr=tesseract | chunk=fixed(256) | emb=bge | db=chroma | ret=basic | llm=qwen
+2026-03-17 03:58:15.073 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\attention-is-all-you-need.pdf (ext=.pdf)
+2026-03-17 03:58:15.251 | INFO     | data_ingestion.document_loader:_load_pdf:96 - PDF loaded: attention-is-all-you-need.pdf (39512 chars)
+2026-03-17 03:58:15.258 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Google.txt (ext=.txt)
+2026-03-17 03:58:15.261 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Google.txt (232201 chars)
+2026-03-17 03:58:15.302 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Microsoft.txt (ext=.txt)
+2026-03-17 03:58:15.303 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Microsoft.txt (201014 chars)
+2026-03-17 03:58:15.338 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Nvidia.txt (ext=.txt)
+2026-03-17 03:58:15.340 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Nvidia.txt (148417 chars)
+2026-03-17 03:58:15.365 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\rag_overview.txt (ext=.txt)
+2026-03-17 03:58:15.366 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: rag_overview.txt (7254 chars)
+2026-03-17 03:58:15.369 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\SpaceX.txt (ext=.txt)
+2026-03-17 03:58:15.370 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: SpaceX.txt (206132 chars)
+2026-03-17 03:58:15.408 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Tesla.txt (ext=.txt)
+2026-03-17 03:58:15.411 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Tesla.txt (299196 chars)
+2026-03-17 03:58:15.467 | INFO     | embedding_layer.embedder:_load:78 - Loading embedding model: BAAI/bge-base-en-v1.5 (device=cpu)
+2026-03-17 03:58:18.461 | INFO     | embedding_layer.embedder:_load:81 - Model loaded — dim=768

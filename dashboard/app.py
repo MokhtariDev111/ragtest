@@ -33,31 +33,7 @@ if str(ROOT) not in sys.path:
 
 from results_storage.database import ExperimentDatabase
 
-# ── Page configuration ─────────────────────────────────────────────────────────
-st.set_page_config(
-    page_title="RAG Benchmark Dashboard",
-    page_icon="🔬",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
-
-# ── Custom CSS ────────────────────────────────────────────────────────────────
-st.markdown("""
-<style>
-  .block-container { padding-top: 1.5rem; padding-bottom: 1rem; }
-  h1 { color: #4f8ef7; }
-  h2, h3 { color: #2dd4bf; }
-  .metric-card {
-    background: #1e293b;
-    border-radius: 8px;
-    padding: 1rem;
-    text-align: center;
-  }
-  .stDataFrame { font-size: 0.8rem !important; }
-</style>
-""", unsafe_allow_html=True)
-
-
+# ── Global Cache ──────────────────────────────────────────────────────────────
 @st.cache_data(ttl=30)
 def load_data(db_path: str) -> pd.DataFrame:
     """Load experiments from SQLite with 30-second cache TTL."""
@@ -66,6 +42,30 @@ def load_data(db_path: str) -> pd.DataFrame:
 
 
 def main():
+    # ── Page configuration ─────────────────────────────────────────────────────────
+    st.set_page_config(
+        page_title="RAG Benchmark Dashboard",
+        page_icon="🔬",
+        layout="wide",
+        initial_sidebar_state="expanded",
+    )
+
+    # ── Custom CSS ────────────────────────────────────────────────────────────────
+    st.markdown("""
+    <style>
+      .block-container { padding-top: 1.5rem; padding-bottom: 1rem; }
+      h1 { color: #4f8ef7; }
+      h2, h3 { color: #2dd4bf; }
+      .metric-card {
+        background: #1e293b;
+        border-radius: 8px;
+        padding: 1rem;
+        text-align: center;
+      }
+      .stDataFrame { font-size: 0.8rem !important; }
+    </style>
+    """, unsafe_allow_html=True)
+    
     st.title("🔬 RAG Benchmarking Dashboard")
     st.caption("Automatically comparing RAG pipeline techniques | Auto-refreshes every 30s")
 
