@@ -136,13 +136,23 @@ class ChromaVectorStore(BaseVectorStore):
 
     def index(self, chunks: list[str], embeddings: np.ndarray) -> None:
         self._ensure_collection()
-        ids = [str(uuid.uuid4()) for _ in chunks]
-        self._collection.add(
-            ids=ids,
-            documents=chunks,
-            embeddings=embeddings.tolist(),
-        )
-        logger.debug(f"Chroma: indexed {len(chunks)} chunks")
+        
+        batch_size = 5000  # ChromaDB/SQLite safe limit is ~5461
+        num_chunks = len(chunks)
+        
+        for i in range(0, num_chunks, batch_size):
+            end_idx = min(i + batch_size, num_chunks)
+            batch_chunks = chunks[i:end_idx]
+            batch_embeddings = embeddings[i:end_idx].tolist()
+            batch_ids = [str(uuid.uuid4()) for _ in range(len(batch_chunks))]
+            
+            self._collection.add(
+                ids=batch_ids,
+                documents=batch_chunks,
+                embeddings=batch_embeddings,
+            )
+        
+        logger.debug(f"Chroma: indexed {len(chunks)} chunks in { (num_chunks + batch_size - 1) // batch_size } batches")
 
     def query(self, embedding: np.ndarray, top_k: int = 5) -> list[str]:
         self._ensure_collection()
@@ -206,18 +216,28 @@ class QdrantVectorStore(BaseVectorStore):
         dim = embeddings.shape[1]
         self._ensure_client(dimension=dim)
         from qdrant_client.models import PointStruct
-        points = []
-        for i, (chunk, vec) in enumerate(zip(chunks, embeddings)):
-            points.append(
-                PointStruct(
-                    id=self._id_counter + i,
-                    vector=vec.tolist(),
-                    payload={"text": chunk},
+        
+        batch_size = 1000  # Qdrant recommendation for batched upserts
+        num_chunks = len(chunks)
+        
+        for i in range(0, num_chunks, batch_size):
+            end_idx = min(i + batch_size, num_chunks)
+            batch_chunks = chunks[i:end_idx]
+            batch_embeddings = embeddings[i:end_idx]
+            
+            points = []
+            for j, (chunk, vec) in enumerate(zip(batch_chunks, batch_embeddings)):
+                points.append(
+                    PointStruct(
+                        id=self._id_counter + i + j,
+                        vector=vec.tolist(),
+                        payload={"text": chunk},
+                    )
                 )
-            )
-        self._client.upsert(collection_name=self.collection_name, points=points)
-        self._id_counter += len(chunks)
-        logger.debug(f"Qdrant: indexed {len(chunks)} chunks (total={self._id_counter})")
+            self._client.upsert(collection_name=self.collection_name, points=points)
+            
+        self._id_counter += num_chunks
+        logger.debug(f"Qdrant: indexed {len(chunks)} chunks in { (num_chunks + batch_size - 1) // batch_size } batches (total={self._id_counter})")
 
     def query(self, embedding: np.ndarray, top_k: int = 5) -> list[str]:
         self._ensure_client()

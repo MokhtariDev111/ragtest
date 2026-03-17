@@ -169,3 +169,209 @@
 2026-03-17 03:24:49.244 | DEBUG    | vector_database.vector_store:index:145 - Chroma: indexed 5309 chunks
 2026-03-17 03:24:49.244 | INFO     | llm_generation.answer_generator:answer_batch:91 - Processing question 1/10: What is retrieval-augmented generation?...
 2026-03-17 03:24:49.312 | DEBUG    | llm_generation.answer_generator:answer:64 - Retrieved 5 chunks in 0.068s
+2026-03-17 03:28:27.602 | INFO     | __main__:run:79 - config: config\default_config.yaml
+2026-03-17 03:28:27.602 | INFO     | __main__:run:80 - project: RAG Benchmarking Framework
+2026-03-17 03:28:28.391 | DEBUG    | results_storage.database:_init_db:106 - Database ready: results_storage\experiments.db
+2026-03-17 03:28:28.391 | INFO     | experiment_runner.runner:_load_evaluation_dataset:284 - Loaded 10 evaluation questions
+2026-03-17 03:28:28.394 | INFO     | experiment_runner.runner:run:63 - Starting experiments: 500 combinations to run
+2026-03-17 03:28:28.394 | INFO     | experiment_runner.runner:run:68 - [1/500] ocr=tesseract | chunk=fixed(256) | emb=bge | db=chroma | ret=basic | llm=mistral
+2026-03-17 03:28:28.395 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\attention-is-all-you-need.pdf (ext=.pdf)
+2026-03-17 03:28:28.395 | WARNING  | data_ingestion.document_loader:_load_pdf:104 - PyMuPDF not installed, falling back to pdfplumber
+2026-03-17 03:28:28.396 | WARNING  | data_ingestion.document_loader:load_directory:85 - Skipping data\documents\attention-is-all-you-need.pdf: No module named 'pdfplumber'
+2026-03-17 03:28:28.396 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Google.txt (ext=.txt)
+2026-03-17 03:28:28.397 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Google.txt (232201 chars)
+2026-03-17 03:28:28.439 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Microsoft.txt (ext=.txt)
+2026-03-17 03:28:28.440 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Microsoft.txt (201014 chars)
+2026-03-17 03:28:28.474 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Nvidia.txt (ext=.txt)
+2026-03-17 03:28:28.475 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Nvidia.txt (148417 chars)
+2026-03-17 03:28:28.500 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\rag_overview.txt (ext=.txt)
+2026-03-17 03:28:28.500 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: rag_overview.txt (7254 chars)
+2026-03-17 03:28:28.502 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\SpaceX.txt (ext=.txt)
+2026-03-17 03:28:28.503 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: SpaceX.txt (206132 chars)
+2026-03-17 03:28:28.541 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Tesla.txt (ext=.txt)
+2026-03-17 03:28:28.543 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Tesla.txt (299196 chars)
+2026-03-17 03:30:22.795 | INFO     | __main__:run:79 - config: config\default_config.yaml
+2026-03-17 03:30:22.795 | INFO     | __main__:run:80 - project: RAG Benchmarking Framework
+2026-03-17 03:30:23.365 | DEBUG    | results_storage.database:_init_db:106 - Database ready: results_storage\experiments.db
+2026-03-17 03:30:23.365 | INFO     | experiment_runner.runner:_load_evaluation_dataset:284 - Loaded 10 evaluation questions
+2026-03-17 03:30:23.369 | INFO     | experiment_runner.runner:run:63 - Starting experiments: 500 combinations to run
+2026-03-17 03:30:23.369 | INFO     | experiment_runner.runner:run:68 - [1/500] ocr=tesseract | chunk=fixed(256) | emb=bge | db=chroma | ret=basic | llm=mistral
+2026-03-17 03:30:23.370 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\attention-is-all-you-need.pdf (ext=.pdf)
+2026-03-17 03:30:23.370 | WARNING  | data_ingestion.document_loader:_load_pdf:104 - PyMuPDF not installed, falling back to pdfplumber
+2026-03-17 03:30:23.370 | WARNING  | data_ingestion.document_loader:load_directory:85 - Skipping data\documents\attention-is-all-you-need.pdf: No module named 'pdfplumber'
+2026-03-17 03:30:23.371 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Google.txt (ext=.txt)
+2026-03-17 03:30:23.372 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Google.txt (232201 chars)
+2026-03-17 03:30:23.410 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Microsoft.txt (ext=.txt)
+2026-03-17 03:30:23.410 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Microsoft.txt (201014 chars)
+2026-03-17 03:30:23.443 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Nvidia.txt (ext=.txt)
+2026-03-17 03:30:23.444 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Nvidia.txt (148417 chars)
+2026-03-17 03:30:23.467 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\rag_overview.txt (ext=.txt)
+2026-03-17 03:30:23.468 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: rag_overview.txt (7254 chars)
+2026-03-17 03:30:23.470 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\SpaceX.txt (ext=.txt)
+2026-03-17 03:30:23.471 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: SpaceX.txt (206132 chars)
+2026-03-17 03:30:23.506 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Tesla.txt (ext=.txt)
+2026-03-17 03:30:23.507 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Tesla.txt (299196 chars)
+2026-03-17 03:30:30.486 | INFO     | embedding_layer.embedder:_load:78 - Loading embedding model: BAAI/bge-base-en-v1.5 (device=cpu)
+2026-03-17 03:30:33.698 | INFO     | embedding_layer.embedder:_load:81 - Model loaded — dim=768
+2026-03-17 03:31:55.199 | INFO     | __main__:run:79 - config: config\default_config.yaml
+2026-03-17 03:31:55.199 | INFO     | __main__:run:80 - project: RAG Benchmarking Framework
+2026-03-17 03:31:55.803 | DEBUG    | results_storage.database:_init_db:106 - Database ready: results_storage\experiments.db
+2026-03-17 03:31:55.803 | INFO     | experiment_runner.runner:_load_evaluation_dataset:284 - Loaded 10 evaluation questions
+2026-03-17 03:31:55.806 | INFO     | experiment_runner.runner:run:63 - Starting experiments: 500 combinations to run
+2026-03-17 03:31:55.806 | INFO     | experiment_runner.runner:run:68 - [1/500] ocr=tesseract | chunk=fixed(256) | emb=bge | db=chroma | ret=basic | llm=mistral
+2026-03-17 03:31:55.807 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\attention-is-all-you-need.pdf (ext=.pdf)
+2026-03-17 03:31:56.031 | INFO     | data_ingestion.document_loader:_load_pdf:96 - PDF loaded: attention-is-all-you-need.pdf (39512 chars)
+2026-03-17 03:31:56.039 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Google.txt (ext=.txt)
+2026-03-17 03:31:56.040 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Google.txt (232201 chars)
+2026-03-17 03:31:56.082 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Microsoft.txt (ext=.txt)
+2026-03-17 03:31:56.083 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Microsoft.txt (201014 chars)
+2026-03-17 03:31:56.117 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Nvidia.txt (ext=.txt)
+2026-03-17 03:31:56.118 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Nvidia.txt (148417 chars)
+2026-03-17 03:31:56.149 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\rag_overview.txt (ext=.txt)
+2026-03-17 03:31:56.150 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: rag_overview.txt (7254 chars)
+2026-03-17 03:31:56.152 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\SpaceX.txt (ext=.txt)
+2026-03-17 03:31:56.153 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: SpaceX.txt (206132 chars)
+2026-03-17 03:31:56.201 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Tesla.txt (ext=.txt)
+2026-03-17 03:31:56.202 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Tesla.txt (299196 chars)
+2026-03-17 03:32:02.333 | INFO     | embedding_layer.embedder:_load:78 - Loading embedding model: BAAI/bge-base-en-v1.5 (device=cpu)
+2026-03-17 03:32:05.402 | INFO     | embedding_layer.embedder:_load:81 - Model loaded — dim=768
+2026-03-17 03:38:31.056 | DEBUG    | vector_database.vector_store:_ensure_collection:132 - Chroma collection ready: rag_bench
+2026-03-17 03:38:31.551 | ERROR    | experiment_runner.runner:run:78 - Experiment failed: ValueError: Batch size of 5501 is greater than max batch size of 5461
+Traceback (most recent call last):
+  File "C:\stage PFE\PFE Project\test2\experiment_runner\runner.py", line 75, in run
+    record = self._run_single(combo)
+  File "C:\stage PFE\PFE Project\test2\experiment_runner\runner.py", line 193, in _run_single
+    store.index(chunks, chunk_vecs)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\stage PFE\PFE Project\test2\vector_database\vector_store.py", line 140, in index
+    self._collection.add(
+    ~~~~~~~~~~~~~~~~~~~~^
+        ids=ids,
+        ^^^^^^^^
+        documents=chunks,
+        ^^^^^^^^^^^^^^^^^
+        embeddings=embeddings.tolist(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\stage PFE\PFE Project\test2\.venv\Lib\site-packages\chromadb\api\models\Collection.py", line 116, in add
+    self._client._add(
+    ~~~~~~~~~~~~~~~~~^
+        collection_id=self.id,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        database=self.database,
+        ^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\stage PFE\PFE Project\test2\.venv\Lib\site-packages\chromadb\api\rust.py", line 454, in _add
+    return self.bindings.add(
+           ~~~~~~~~~~~~~~~~~^
+        ids,
+        ^^^^
+    ...<6 lines>...
+        database,
+        ^^^^^^^^^
+    )
+    ^
+chromadb.errors.InternalError: ValueError: Batch size of 5501 is greater than max batch size of 5461
+
+2026-03-17 03:38:31.617 | INFO     | results_storage.database:insert_experiment:142 - Experiment logged: 3325e11e-eb96-4afe-b023-d90d9312f200
+2026-03-17 03:38:31.617 | INFO     | experiment_runner.runner:run:68 - [2/500] ocr=tesseract | chunk=fixed(256) | emb=bge | db=chroma | ret=basic | llm=qwen
+2026-03-17 03:38:31.618 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\attention-is-all-you-need.pdf (ext=.pdf)
+2026-03-17 03:38:31.744 | INFO     | data_ingestion.document_loader:_load_pdf:96 - PDF loaded: attention-is-all-you-need.pdf (39512 chars)
+2026-03-17 03:38:31.751 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Google.txt (ext=.txt)
+2026-03-17 03:38:31.752 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Google.txt (232201 chars)
+2026-03-17 03:38:31.792 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Microsoft.txt (ext=.txt)
+2026-03-17 03:38:31.793 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Microsoft.txt (201014 chars)
+2026-03-17 03:38:31.827 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Nvidia.txt (ext=.txt)
+2026-03-17 03:38:31.828 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Nvidia.txt (148417 chars)
+2026-03-17 03:38:31.853 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\rag_overview.txt (ext=.txt)
+2026-03-17 03:38:31.853 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: rag_overview.txt (7254 chars)
+2026-03-17 03:38:31.855 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\SpaceX.txt (ext=.txt)
+2026-03-17 03:38:31.857 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: SpaceX.txt (206132 chars)
+2026-03-17 03:38:31.892 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Tesla.txt (ext=.txt)
+2026-03-17 03:38:31.893 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Tesla.txt (299196 chars)
+2026-03-17 03:38:31.959 | INFO     | embedding_layer.embedder:_load:78 - Loading embedding model: BAAI/bge-base-en-v1.5 (device=cpu)
+2026-03-17 03:38:34.698 | INFO     | embedding_layer.embedder:_load:81 - Model loaded — dim=768
+2026-03-17 03:45:07.925 | DEBUG    | vector_database.vector_store:_ensure_collection:132 - Chroma collection ready: rag_bench
+2026-03-17 03:45:08.453 | ERROR    | experiment_runner.runner:run:78 - Experiment failed: ValueError: Batch size of 5501 is greater than max batch size of 5461
+Traceback (most recent call last):
+  File "C:\stage PFE\PFE Project\test2\experiment_runner\runner.py", line 75, in run
+    record = self._run_single(combo)
+  File "C:\stage PFE\PFE Project\test2\experiment_runner\runner.py", line 193, in _run_single
+    store.index(chunks, chunk_vecs)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\stage PFE\PFE Project\test2\vector_database\vector_store.py", line 140, in index
+    self._collection.add(
+    ~~~~~~~~~~~~~~~~~~~~^
+        ids=ids,
+        ^^^^^^^^
+        documents=chunks,
+        ^^^^^^^^^^^^^^^^^
+        embeddings=embeddings.tolist(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\stage PFE\PFE Project\test2\.venv\Lib\site-packages\chromadb\api\models\Collection.py", line 116, in add
+    self._client._add(
+    ~~~~~~~~~~~~~~~~~^
+        collection_id=self.id,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        database=self.database,
+        ^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\stage PFE\PFE Project\test2\.venv\Lib\site-packages\chromadb\api\rust.py", line 454, in _add
+    return self.bindings.add(
+           ~~~~~~~~~~~~~~~~~^
+        ids,
+        ^^^^
+    ...<6 lines>...
+        database,
+        ^^^^^^^^^
+    )
+    ^
+chromadb.errors.InternalError: ValueError: Batch size of 5501 is greater than max batch size of 5461
+
+2026-03-17 03:45:08.520 | INFO     | results_storage.database:insert_experiment:142 - Experiment logged: 8a567407-bb26-452d-a5f0-b6ad49ebb5a4
+2026-03-17 03:45:08.520 | INFO     | experiment_runner.runner:run:68 - [3/500] ocr=tesseract | chunk=fixed(256) | emb=bge | db=chroma | ret=basic | llm=llama3.2
+2026-03-17 03:45:08.521 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\attention-is-all-you-need.pdf (ext=.pdf)
+2026-03-17 03:45:08.646 | INFO     | data_ingestion.document_loader:_load_pdf:96 - PDF loaded: attention-is-all-you-need.pdf (39512 chars)
+2026-03-17 03:45:08.653 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Google.txt (ext=.txt)
+2026-03-17 03:45:08.654 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Google.txt (232201 chars)
+2026-03-17 03:45:08.692 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Microsoft.txt (ext=.txt)
+2026-03-17 03:45:08.693 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Microsoft.txt (201014 chars)
+2026-03-17 03:45:08.726 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Nvidia.txt (ext=.txt)
+2026-03-17 03:45:08.727 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Nvidia.txt (148417 chars)
+2026-03-17 03:45:08.752 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\rag_overview.txt (ext=.txt)
+2026-03-17 03:45:08.752 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: rag_overview.txt (7254 chars)
+2026-03-17 03:45:08.754 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\SpaceX.txt (ext=.txt)
+2026-03-17 03:45:08.755 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: SpaceX.txt (206132 chars)
+2026-03-17 03:45:08.788 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Tesla.txt (ext=.txt)
+2026-03-17 03:45:08.789 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Tesla.txt (299196 chars)
+2026-03-17 03:45:08.841 | INFO     | embedding_layer.embedder:_load:78 - Loading embedding model: BAAI/bge-base-en-v1.5 (device=cpu)
+2026-03-17 03:45:11.564 | INFO     | embedding_layer.embedder:_load:81 - Model loaded — dim=768
+2026-03-17 03:47:50.143 | INFO     | __main__:run:79 - config: config\default_config.yaml
+2026-03-17 03:47:50.143 | INFO     | __main__:run:80 - project: RAG Benchmarking Framework
+2026-03-17 03:47:51.720 | DEBUG    | results_storage.database:_init_db:106 - Database ready: results_storage\experiments.db
+2026-03-17 03:47:51.720 | INFO     | experiment_runner.runner:_load_evaluation_dataset:284 - Loaded 10 evaluation questions
+2026-03-17 03:47:51.725 | INFO     | experiment_runner.runner:run:63 - Starting experiments: 500 combinations to run
+2026-03-17 03:47:51.725 | INFO     | experiment_runner.runner:run:68 - [1/500] ocr=tesseract | chunk=fixed(256) | emb=bge | db=chroma | ret=basic | llm=mistral
+2026-03-17 03:47:51.726 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\attention-is-all-you-need.pdf (ext=.pdf)
+2026-03-17 03:47:52.237 | INFO     | data_ingestion.document_loader:_load_pdf:96 - PDF loaded: attention-is-all-you-need.pdf (39512 chars)
+2026-03-17 03:47:52.257 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Google.txt (ext=.txt)
+2026-03-17 03:47:52.260 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Google.txt (232201 chars)
+2026-03-17 03:47:52.357 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Microsoft.txt (ext=.txt)
+2026-03-17 03:47:52.359 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Microsoft.txt (201014 chars)
+2026-03-17 03:47:52.425 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Nvidia.txt (ext=.txt)
+2026-03-17 03:47:52.428 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Nvidia.txt (148417 chars)
+2026-03-17 03:47:52.479 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\rag_overview.txt (ext=.txt)
+2026-03-17 03:47:52.481 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: rag_overview.txt (7254 chars)
+2026-03-17 03:47:52.485 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\SpaceX.txt (ext=.txt)
+2026-03-17 03:47:52.487 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: SpaceX.txt (206132 chars)
+2026-03-17 03:47:52.560 | DEBUG    | data_ingestion.document_loader:load_file:53 - Loading file: data\documents\Tesla.txt (ext=.txt)
+2026-03-17 03:47:52.566 | INFO     | data_ingestion.document_loader:_load_text:125 - Text file loaded: Tesla.txt (299196 chars)
+2026-03-17 03:48:03.571 | INFO     | embedding_layer.embedder:_load:78 - Loading embedding model: BAAI/bge-base-en-v1.5 (device=cpu)
+2026-03-17 03:48:06.686 | INFO     | embedding_layer.embedder:_load:81 - Model loaded — dim=768
